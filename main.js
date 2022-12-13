@@ -210,6 +210,7 @@ function selectProduct(){
             total+=productoEscojido.precio
             localStorage.setItem("total",JSON.stringify(total))
             localStorage.setItem("carrito",JSON.stringify(elementos))
+            console.log("hola")
         }
         
 }}
