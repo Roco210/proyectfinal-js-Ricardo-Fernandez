@@ -22,6 +22,8 @@ const sustrato = new Producto(2, "sustrato ligero 25dm", 2200, " https://http2.m
 const fertilizante = new Producto(3, "fertilizante completo", 800, " https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnc021QXFS6JuYvhUzEJczjWKz4IlS4_p2zA&usqp=CAU", 10)
 const insecticida = new Producto(4, "insecticida", 500, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAljp23Kld9LQa4HaeUC68qHSIBOtrrY_-jw&usqp=CAU ", 10)
 
+
+
 let stock = []
 stock.push(maceta)
 stock.push(sustrato)
@@ -32,8 +34,9 @@ localStorage.setItem("base",JSON.stringify(stock))
 
 let checkUsuario 
 let btnPrin = document.getElementById("btnPrin")
-
 let principal=document.getElementById("principal")
+
+/* localStorage.setItem("carrito", JSON.stringify(carritoProd)) */
 
 
 function botonPrincipal(){
@@ -74,6 +77,7 @@ function ingreso (){
 
 }
 
+
 function validacionUsuario(){
         let btnUs = document.getElementById("submitUsuario")
         btnUs.onclick= async (e)=>{
@@ -104,9 +108,26 @@ function tienda (){
     </div>
     <div class="row align-items-center "></div>    
         <div class="col d-flex justify-content-evenly">
-            <p class="col-3"> Hola </p>
-            <button class="col-3" type="button" class="btn btn-danger">CARRITO</button>
+            <button id="btnCarrito" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"> Carrito </button>
         </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Carrito</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div id="chart">
+            </div>
+        </div>
+        <div class="modal-footer" id="btnChart">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="endShop">Finalizar compra</button>
+        </div>
+        </div>
+    </div>
     </div>
     </nav>
     <main>
@@ -129,12 +150,73 @@ function tienda (){
             <p class="card-text"> $ ${p.precio} </p>
             <button id= "${p.id}" type="button" class="btn btn-danger">AGREGAR AL CARRITO</button>
         </div>
-    </div>`
+    </div>`})
+    
+    selectProduct()
+    
+    }
 
-    })}
+ function carrito(){
+    let btnCarrito = document.getElementById("btnCarrito")
+    let chart = document.getElementById("chart")
+    let btnChart = document.getElementById("btnChart")
+    let listaCarrito =  JSON.parse(localStorage.getItem("carrito"))
+    let total =  JSON.parse(localStorage.getItem("total"))
+    btnCarrito.onclick =async (e)=>{
+    listaCarrito.forEach(p=>{
+    chart.innerHTML+=`
+    <div>
+    <h5>${p.nombre}   =>   ${p.cantidad}</h5>
+    </div>
+    ` })
+    chart.innerHTML+=`Total:${total}`}
+    btnChart.onclick=(e)=>{
+    if(e=== close){
+        chart.remove()
+    } else{ location.reload()}
+    }
+    
+}
+
+function selectProduct(){
+    let carritoProd =[]
+    let elementos=[]
+    let total =0
+    tarjetas.onclick=(e)=>{
+        let ip=parseInt((e.target.id))
+        let productoEscojido = stock.find(element=>element.id===ip)
+        let temp =carritoProd.includes(productoEscojido)
+        Toastify({
+            text: `${productoEscojido.nombre} sumado al carrito`,
+            duration: 500,
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)"
+            }
+            }).showToast();
+        //agrega en el localStorage los productos y la cantidad escogida
+        if(temp===false){
+            total = JSON.parse(localStorage.getItem("total"))
+            let productoCarrito ={"id":ip,"nombre":productoEscojido.nombre, "cantidad": 1,"precio":productoEscojido.precio}
+            total+=productoEscojido.precio
+            carritoProd.push(productoEscojido)
+            elementos.push(productoCarrito)
+            localStorage.setItem("total",JSON.stringify(total))
+            localStorage.setItem("carrito",JSON.stringify(elementos))
+        }else{
+            total = JSON.parse(localStorage.getItem("total"))
+            elementos = JSON.parse(localStorage.getItem("carrito"))
+            productoEscojido = elementos.find(element=>element.id ===ip)
+            productoEscojido.cantidad++
+            total+=productoEscojido.precio
+            localStorage.setItem("total",JSON.stringify(total))
+            localStorage.setItem("carrito",JSON.stringify(elementos))
+        }
+        
+}}
 
 // ejecucuion de funciones
 
 
 ingreso()
 botonPrincipal()
+carrito()

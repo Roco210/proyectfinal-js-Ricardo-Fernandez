@@ -17,3 +17,9 @@
     background-color: rgb(143, 46, 46);
     text-align: center;
 }
+.card-img-top{
+    height: 20rem ;
+}
+#saludo{
+    font-size: 25px;
+}
