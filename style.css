@@ -1,0 +1,19 @@
+
+#btnPrin{
+    position: absolute;
+    padding: 10px;
+} 
+#formularioUsuario{
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    border: solid rgb(0, 0, 0);
+}
+.card{
+    padding:10px;
+
+}
+
+#tiendaNav{
+    background-color: rgb(143, 46, 46);
+    text-align: center;
+}

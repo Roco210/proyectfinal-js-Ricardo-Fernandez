@@ -1,0 +1,35 @@
+[{"id": 1,
+"usuario":"ricardo",
+"password":123456,
+"superadmin":true,
+"direccion":"calle falsa",
+"altura":"123"
+},
+{"id": 2,
+"usuario":"raul",
+"password":123456,
+"superadmin":false,
+"direccion":"calle falsa",
+"altura":"123"
+},
+{"id": 3,
+"usuario":"daiana",
+"password":123456,
+"superadmin":false,
+"direccion":"calle falsa",
+"altura":"123"
+},
+{"id": 4,
+"usuario":"farid",
+"password":123456,
+"superadmin":true,
+"direccion":"calle falsa",
+"altura":"123"
+},
+{"id": 5,
+"usuario":"diego",
+"password":123456,
+"superadmin":false,
+"direccion":"calle falsa",
+"altura":"123"
+} ]
