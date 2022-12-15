@@ -1,18 +1,18 @@
 
 //principal usuario o invitado
 class Usuario {
-    constructor(usuario,password){
-        this.usuario=usuario,
-        this.password=password
+    constructor(usuario, password) {
+        this.usuario = usuario,
+            this.password = password
     }
 }
 class Producto {
     constructor(id, nombre, precio, imagen, stock) {
         this.id = id,
-        this.nombre = nombre,
-        this.precio = precio,
-        this.imagen = imagen,
-        this.stock = stock
+            this.nombre = nombre,
+            this.precio = precio,
+            this.imagen = imagen,
+            this.stock = stock
     }
 }
 
@@ -22,28 +22,22 @@ const sustrato = new Producto(2, "sustrato ligero 25dm", 2200, " https://http2.m
 const fertilizante = new Producto(3, "fertilizante completo", 800, " https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnc021QXFS6JuYvhUzEJczjWKz4IlS4_p2zA&usqp=CAU", 10)
 const insecticida = new Producto(4, "insecticida", 500, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAljp23Kld9LQa4HaeUC68qHSIBOtrrY_-jw&usqp=CAU ", 10)
 
-
-
 let stock = []
 stock.push(maceta)
 stock.push(sustrato)
 stock.push(fertilizante)
 stock.push(insecticida)
-localStorage.setItem("base",JSON.stringify(stock))
-
-
-let checkUsuario 
+localStorage.setItem("base", JSON.stringify(stock))
+let checkUsuario
 let btnPrin = document.getElementById("btnPrin")
-let principal=document.getElementById("principal")
-
-/* localStorage.setItem("carrito", JSON.stringify(carritoProd)) */
+let principal = document.getElementById("principal")
 
 
-function botonPrincipal(){
-    btnPrin.onclick=(e)=>{
-    if(e.target.id === "btnPrinUs"){
-        //agregar funcion dom usuario
-        principal.innerHTML = `
+function botonPrincipal() {
+    btnPrin.onclick = (e) => {
+        if (e.target.id === "btnPrinUs") {
+            //agregar funcion dom usuario
+            principal.innerHTML = `
         <div class="row align-items-center" id="principal">
             <img src="https://media.istockphoto.com/id/470649314/es/foto/nursery.jpg?s=612x612&w=0&k=20&c=ZlD3m-OxamXVHfssBEEsnnoLukFz4nQMomTLzpgGFqM="
         alt="">
@@ -64,44 +58,42 @@ function botonPrincipal(){
                 </form>
                 </div>
         </div>`
-        validacionUsuario()
-    } else{(tienda())}
-    
-}}
+            validacionUsuario()
+        } else { (tienda()) }
 
-//verificacion de acceso
-function ingreso (){
-    if(JSON.parse(localStorage.getItem("usuario")=== null)){
-        
-    }else {tienda()}
-
+    }
 }
 
 
-function validacionUsuario(){
-        let btnUs = document.getElementById("submitUsuario")
-        btnUs.onclick= async (e)=>{
-            if(e.target.id === "env"){
-                let formulario= document.getElementsByClassName("form-control")
-                let password = await formulario.password.value
-                let usuario = await formulario.usuario.value
-                const usuarioActivo = new Usuario (usuario,password)
-                let response = await fetch("./usuarios.json")
-                let listaUsuarios = await response.json()
-                let filtradoUsuario = await listaUsuarios.find(e=>e.usuario === usuarioActivo.usuario)
-                if (filtradoUsuario != undefined && filtradoUsuario.usuario== usuarioActivo.usuario && filtradoUsuario.password== usuarioActivo.password){
-                    const almacenarUsuario ={"nombre":filtradoUsuario.usuario,"acceso":filtradoUsuario.superadmin}
-                    localStorage.setItem("usuario",JSON.stringify(almacenarUsuario))
-                    tienda()
-                }else{swal("", "Por favor ingresar Usuario/Contraseña correcta", "error")}
-            }else {tienda()}
-        }
+function ingreso() {
+    if (JSON.parse(localStorage.getItem("usuario") === null)) {
+
+    } else { tienda() }
+
+}
+
+function validacionUsuario() {
+    let btnUs = document.getElementById("submitUsuario")
+    btnUs.onclick = async (e) => {
+        if (e.target.id === "env") {
+            let formulario = document.getElementsByClassName("form-control")
+            let password = await formulario.password.value
+            let usuario = await formulario.usuario.value
+            const usuarioActivo = new Usuario(usuario, password)
+            let response = await fetch("./usuarios.json")
+            let listaUsuarios = await response.json()
+            let filtradoUsuario = await listaUsuarios.find(e => e.usuario === usuarioActivo.usuario)
+            if (filtradoUsuario != undefined && filtradoUsuario.usuario == usuarioActivo.usuario && filtradoUsuario.password == usuarioActivo.password) {
+                const almacenarUsuario = { "nombre": filtradoUsuario.usuario, "acceso": filtradoUsuario.superadmin }
+                localStorage.setItem("usuario", JSON.stringify(almacenarUsuario))
+                tienda()
+            } else { swal("", "Por favor ingresar Usuario/Contraseña correcta", "error") }
+        } else { tienda() }
     }
-        
+}
 
-
-function tienda (){
-    principal.innerHTML=`
+function tienda() {
+    principal.innerHTML = `
     <nav id="tiendaNav">
     <div class="row">
         <h1>Bienvenido a la tienda virtual</h1>
@@ -138,11 +130,11 @@ function tienda (){
         
     </main>
     `
-    let nav =document.getElementById("tiendaNav")
+    let nav = document.getElementById("tiendaNav")
     let tarjetas = document.getElementById("tarjetas")
     let infobase = JSON.parse(localStorage.getItem("base"))
     infobase.forEach(p => {
-    tarjetas.innerHTML += `
+        tarjetas.innerHTML += `
     <div class="card col-2 m-2 " style="width: 18rem;">
         <div class="card-body align-items-start">
             <img src="${p.imagen}" class="card-img-top" alt="...">
@@ -151,69 +143,72 @@ function tienda (){
             <button id= "${p.id}" type="button" class="btn btn-danger">AGREGAR AL CARRITO</button>
         </div>
     </div>`})
-    
+
     selectProduct()
     carrito()
-    }
+}
 
- function carrito(){
+function carrito() {
     let btnCarrito = document.getElementById("btnCarrito")
     let chart = document.getElementById("chart")
     let btnChart = document.getElementById("btnChart")
-    btnCarrito.onclick=()=>{
-    let listaCarrito =  JSON.parse(localStorage.getItem("carrito"))
-    let total =  JSON.parse(localStorage.getItem("total"))
-    console.log(listaCarrito)
-    listaCarrito.forEach(p=>{
-    chart.innerHTML+=`
+    btnCarrito.onclick = () => {
+        let listaCarrito = JSON.parse(localStorage.getItem("carrito"))
+        let total = JSON.parse(localStorage.getItem("total"))
+        chart.innerHTML = ""
+        listaCarrito.forEach(p => {
+            chart.innerHTML += `
     <h5>${p.nombre}   =>   ${p.cantidad}</h5>
     ` })
-    chart.innerHTML+=`<p>Total:${total}</p>`}
+        chart.innerHTML += `<p>Total: $${total}</p>`
+    }
 
-    btnChart.onclick=(e)=>{ (console.log(e.target.id))
-    if(e.target.id === "close"){
-        chart.innerHTML=""
-    } else{localStorage.clear()
-    location.reload()}
+    btnChart.onclick = (e) => {
+        if (e.target.id === "endShop") {
+            localStorage.clear()
+            location.reload()
+        }
     }
 }
 
 
-function selectProduct(){
+function selectProduct() {
     let carritoProd = []
-    let elementos=[]
-    let total =0
-    tarjetas.onclick=(e)=>{
-        let ip=parseInt((e.target.id))
-        let productoEscojido = stock.find(element=>element.id===ip)
-        let temp =carritoProd.includes(productoEscojido)
+    let elementos = []
+    let total = 0
+    tarjetas.onclick = (e) => {
+        let ip = parseInt((e.target.id))
+        let productoEscojido = stock.find(element => element.id === ip)
+        let temp = carritoProd.includes(productoEscojido)
         Toastify({
             text: `${productoEscojido.nombre} sumado al carrito`,
             duration: 500,
             style: {
                 background: "linear-gradient(to right, #00b09b, #96c93d)"
             }
-            }).showToast();
+        }).showToast();
         //agrega en el localStorage los productos y la cantidad escogida
-        if(temp===false){
+        if (temp === false) {
             total = JSON.parse(localStorage.getItem("total"))
-            let productoCarrito ={"id":ip,"nombre":productoEscojido.nombre, "cantidad": 1,"precio":productoEscojido.precio}
-            total+=productoEscojido.precio
+            let productoCarrito = { "id": ip, "nombre": productoEscojido.nombre, "cantidad": 1, "precio": productoEscojido.precio }
+            total += productoEscojido.precio
             carritoProd.push(productoEscojido)
             elementos.push(productoCarrito)
-            localStorage.setItem("total",JSON.stringify(total))
-            localStorage.setItem("carrito",JSON.stringify(elementos))
-        }else{
+            localStorage.setItem("total", JSON.stringify(total))
+            localStorage.setItem("carrito", JSON.stringify(elementos))
+        } else {
             total = JSON.parse(localStorage.getItem("total"))
             elementos = JSON.parse(localStorage.getItem("carrito"))
-            productoEscojido = elementos.find(element=>element.id ===ip)
-            productoEscojido.cantidad++
-            total+=productoEscojido.precio
-            localStorage.setItem("total",JSON.stringify(total))
-            localStorage.setItem("carrito",JSON.stringify(elementos))
+            productoCarrito = elementos.find(element => element.id === ip)
+            productoCarrito.cantidad++
+            total += productoCarrito.precio
+            localStorage.setItem("total", JSON.stringify(total))
+            localStorage.setItem("carrito", JSON.stringify(elementos))
         }
-        
-}}
+
+    }
+}
+
 
 // ejecucuion de funciones
 
