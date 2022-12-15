@@ -93,7 +93,7 @@ function validacionUsuario(){
                     const almacenarUsuario ={"nombre":filtradoUsuario.usuario,"acceso":filtradoUsuario.superadmin}
                     localStorage.setItem("usuario",JSON.stringify(almacenarUsuario))
                     tienda()
-                }else{alert("Por favor ingresar Usuario/Contraseña correcta")}
+                }else{swal("", "Por favor ingresar Usuario/Contraseña correcta", "error")}
             }else {tienda()}
         }
     }
@@ -153,33 +153,34 @@ function tienda (){
     </div>`})
     
     selectProduct()
-    
+    carrito()
     }
 
  function carrito(){
     let btnCarrito = document.getElementById("btnCarrito")
     let chart = document.getElementById("chart")
     let btnChart = document.getElementById("btnChart")
+    btnCarrito.onclick=()=>{
     let listaCarrito =  JSON.parse(localStorage.getItem("carrito"))
     let total =  JSON.parse(localStorage.getItem("total"))
-    btnCarrito.onclick =async (e)=>{
+    console.log(listaCarrito)
     listaCarrito.forEach(p=>{
     chart.innerHTML+=`
-    <div>
     <h5>${p.nombre}   =>   ${p.cantidad}</h5>
-    </div>
     ` })
-    chart.innerHTML+=`Total:${total}`}
-    btnChart.onclick=(e)=>{
-    if(e=== close){
-        chart.remove()
-    } else{ location.reload()}
+    chart.innerHTML+=`<p>Total:${total}</p>`}
+
+    btnChart.onclick=(e)=>{ (console.log(e.target.id))
+    if(e.target.id === "close"){
+        chart.innerHTML=""
+    } else{localStorage.clear()
+    location.reload()}
     }
-    
 }
 
+
 function selectProduct(){
-    let carritoProd =[]
+    let carritoProd = []
     let elementos=[]
     let total =0
     tarjetas.onclick=(e)=>{
@@ -210,7 +211,6 @@ function selectProduct(){
             total+=productoEscojido.precio
             localStorage.setItem("total",JSON.stringify(total))
             localStorage.setItem("carrito",JSON.stringify(elementos))
-            console.log("hola")
         }
         
 }}
@@ -220,4 +220,3 @@ function selectProduct(){
 
 ingreso()
 botonPrincipal()
-carrito()
